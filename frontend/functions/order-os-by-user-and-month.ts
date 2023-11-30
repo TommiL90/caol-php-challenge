@@ -9,7 +9,6 @@ export const orderInvoicesByUserAndMonth = async (
   invoices: RetrieveInvoice[],
 ) => {
   const invoicesByUserAndMonth = osByUsers.reduce(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (accumulator: { [key: string]: any }, os) => {
       const user = os.co_usuario
 
