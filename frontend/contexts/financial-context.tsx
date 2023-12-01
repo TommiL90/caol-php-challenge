@@ -5,11 +5,6 @@ import {
   InvoicesByUserAndMonth,
   orderInvoicesByUserAndMonth,
 } from '@/functions/order-os-by-user-and-month'
-import { Consultant } from '@/functions/retrieve-consultants'
-import {
-  FixedCostFromConsultans,
-  fixedCostFromConsultant,
-} from '@/functions/retrieve-fixed-costs-from-consultants'
 import {
   MonthObjectArray,
   transformMonthObjectToArray,
@@ -21,6 +16,8 @@ import {
 import useConsultants from '@/hooks/useConsultants'
 import { DateRange } from '@/hooks/useDateRange'
 import { api } from '@/services/api'
+import { Consultant } from '@/types/consultant'
+import { FixedCostFromConsultans } from '@/types/fixed-cost-from-consultants'
 import { addDays } from 'date-fns'
 import {
   Dispatch,
@@ -83,18 +80,9 @@ export const FinancialProvider = ({ children }: IChildrenProps) => {
         } })
 
       const data: InvoicesByUserAndMonth  = response.data  
-      //delete
-      //const os = await retrieveOsByConsultants(movedUsers)
 
-      //const invoices = await retrieveInvoices(os, startDate, endDate)
-
-      //const invoicesByUserAndMonth = await orderInvoicesByUserAndMonth(
-      //  os,
-      //  invoices,
-      //)
-      //console.log(invoicesByUserAndMonth)
       setReportTable(data)
-
+      
       const monthObjectToArr = await transformMonthObjectToArray(
         data,
       )
@@ -118,11 +106,13 @@ export const FinancialProvider = ({ children }: IChildrenProps) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const fixedCostUsersData = await fixedCostFromConsultant()
+        //delete
+        //const fixedCostUsersData = await fixedCostFromConsultant()
         const response = await api.get('fixed-cost')
+        const data: FixedCostFromConsultans[] = response.data
         //console.log(response.data)
         //console.log(fixedCostUsersData)
-        setfixedCostfromConsultantData(fixedCostUsersData)
+        setfixedCostfromConsultantData(data)
       } catch (error) {
         console.error(error)
       }

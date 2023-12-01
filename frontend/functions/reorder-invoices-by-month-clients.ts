@@ -1,8 +1,8 @@
 /* eslint-disable camelcase */
 'use server'
 
+import { RetrieveInvoice } from '@/types/retrieve-invoices'
 import Decimal from 'decimal.js-light'
-import { RetrieveInvoice } from './retrieve-invoices'
 
 export interface ClientWithNetRevenue {
   co_cliente: number

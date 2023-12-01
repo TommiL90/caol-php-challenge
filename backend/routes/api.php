@@ -30,6 +30,8 @@ Route::get('/invoicesbyconsultants', [InvoicesController::class, 'getInvoicesByC
 
 Route::get('/fixed-cost', [SalaryController::class, 'getFixedCostByConsultants']);
 
+Route::get('/average-fixed-cost', [SalaryController::class, 'getAverageFixedCostFromConsultants']);
+
 Route::get('/clients', [ClientsController::class, 'getAll']);
 
 Route::get('/invoicesbyclients', [InvoicesController::class, 'getInvoicesByClientsAndDate']);

@@ -1,6 +1,3 @@
-'use server'
-import { prisma } from '@/lib/prisma'
-
 export interface Client {
   co_cliente: number
   no_razao?: string | null
@@ -27,12 +24,4 @@ export interface Client {
   nu_fax?: string | null
   ddd2?: string | null
   telefone2?: string | null
-}
-
-export const retrieveClients = async () => {
-  const clients = await prisma.cao_cliente.findMany({
-    where: { tp_cliente: 'A' },
-  })
-
-  return clients
 }

@@ -13,4 +13,11 @@ class SalaryController extends Controller
 
         return $fixedCost->getFixedCostFromConsultants();
     }
+
+    public function getAverageFixedCostFromConsultants() {
+
+        $averageFixedCost  = new SalaryService;
+
+        return $averageFixedCost->calculateAverageFixedCost();
+    }
 }

@@ -1,4 +1,4 @@
-import { Client } from '@/functions/retrieve-clients'
+import { Client } from '@/types/clients'
 import React from 'react'
 
 interface SelectedUserClientBoxProps {

@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use server'
 import Decimal from 'decimal.js-light'
-import { calculateAverageFixedCost } from './average-fixed-cost-from-consultants'
 import { getMonthName } from './get-month-name'
-import { InvoicesByUserAndMonth } from './order-os-by-user-and-month'
+import { api } from '@/services/api'
+import { InvoicesByUserAndMonth } from '@/types/invoices-by-user-and-month'
 
 export interface MonthObject {
   month: string
@@ -16,7 +15,10 @@ export const transformMonthObjectToArray = async (
   invoicesByUserAndMonth: InvoicesByUserAndMonth,
 ): Promise<MonthObjectArray[]> => {
   const newArr: MonthObjectArray[] = []
-  const avgFixedCost = await calculateAverageFixedCost()
+
+  const response = await api("average-fixed-cost")
+
+  const avgFixedCost = response.data
 
   const months = Array.from(
     new Set(

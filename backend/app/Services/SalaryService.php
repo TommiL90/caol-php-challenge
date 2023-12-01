@@ -21,4 +21,21 @@ class SalaryService
     
     return $fixedCosts;
   }
+
+  public function calculateAverageFixedCost()
+{
+    $salaries = Salary::all();
+
+    if ($salaries->isEmpty()) {
+        return null;
+    }
+
+    $totalSalary = $salaries->reduce(function ($total, $salary) {
+        return $total + $salary->brut_salario;
+    }, 0);
+
+    $averageFixedCost = $totalSalary / $salaries->count();
+
+    return $averageFixedCost;
+}
 }

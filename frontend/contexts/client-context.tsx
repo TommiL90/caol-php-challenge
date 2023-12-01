@@ -6,15 +6,14 @@ import {
   MonthWithClients,
   reorderInvoicesfromMonthsAndClients,
 } from '@/functions/reorder-invoices-by-month-clients'
-import { Client } from '@/functions/retrieve-clients'
-import { RetrieveInvoice } from '@/functions/retrieve-invoices'
-import { retrieveInvoicesFromClients } from '@/functions/retrieve-invoices-froms-clients'
 import { transformInvoicesToMonthlyFormat } from '@/functions/transform-invoices-to-monthly-format'
 import { transformToClientSummaries } from '@/functions/transform-to-client-summaries'
 import { UserSummaries } from '@/functions/user-summaries'
 import useClients from '@/hooks/useClients'
 import { DateRange } from '@/hooks/useDateRange'
 import { api } from '@/services/api'
+import { Client } from '@/types/clients'
+import { RetrieveInvoice } from '@/types/retrieve-invoices'
 import { addDays } from 'date-fns'
 import { Dispatch, SetStateAction, createContext, useState } from 'react'
 
@@ -62,48 +61,45 @@ export const ClientsProvider = ({ children }: IChildrenProps) => {
 
   const getReport = async () => {
     if (date?.from && date?.to && movedUsers.length > 0) {
-      
-      //delete
-      const invoices = await retrieveInvoicesFromClients(
-        movedUsers,
-        date.from,
-        date.to,
-      )
 
-      const response = await api.get('invoicesbyclients', {
-        params: {
-          clients: movedUsers,
-          startDate: date.from.toISOString(),
-          endDate: date.to.toISOString()
-        } })
+      try {
+        const response = await api.get('invoicesbyclients', {
+          params: {
+            clients: movedUsers,
+            startDate: date.from.toISOString(),
+            endDate: date.to.toISOString()
+          }
+        });
 
-      const data: RetrieveInvoice[]  = response.data  
+        const data: RetrieveInvoice[] = response.data;
 
-      console.log('data', data)
-      console.log('invoices', invoices)
+        const orderInvoicesfromMonthsAndClients =
+          await reorderInvoicesfromMonthsAndClients(data)
 
-      const orderInvoicesfromMonthsAndClients =
-        await reorderInvoicesfromMonthsAndClients(data)
+        setArrOrderedforMonthAndUser(orderInvoicesfromMonthsAndClients)
 
-      setArrOrderedforMonthAndUser(orderInvoicesfromMonthsAndClients)
+        const allClients = await findAllClients(orderInvoicesfromMonthsAndClients)
 
-      const allClients = await findAllClients(orderInvoicesfromMonthsAndClients)
+        setAllClientsForTable(allClients)
 
-      setAllClientsForTable(allClients)
+        // grafico
 
-      // grafico
+        const dataMonthlyFormatForRecharts =
+          await transformInvoicesToMonthlyFormat(
+            orderInvoicesfromMonthsAndClients,
+          )
 
-      const dataMonthlyFormatForRecharts =
-        await transformInvoicesToMonthlyFormat(
-          orderInvoicesfromMonthsAndClients,
+        setReportGraphic(dataMonthlyFormatForRecharts)
+
+        const dataForPizzaRechart = await transformToClientSummaries(
+          dataMonthlyFormatForRecharts,
         )
+        setReportPizza(dataForPizzaRechart)
 
-      setReportGraphic(dataMonthlyFormatForRecharts)
+      } catch (error) {
+        console.error("Error", error);
+      }
 
-      const dataForPizzaRechart = await transformToClientSummaries(
-        dataMonthlyFormatForRecharts,
-      )
-      setReportPizza(dataForPizzaRechart)
     } else {
       alert('date or users are undefined')
     }
