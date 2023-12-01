@@ -1,5 +1,6 @@
 'use client'
 import { Client, retrieveClients } from '@/functions/retrieve-clients'
+import { api } from '@/services/api'
 import { useEffect, useState } from 'react'
 
 const useClients = () => {
@@ -34,7 +35,10 @@ const useClients = () => {
 
   useEffect(() => {
     const retrieveUser = async () => {
-      const data = await retrieveClients()
+      //delete
+      //const data = await retrieveClients()
+      const response = await api('clients')
+      const data: Client[] = response.data
       setAvailableUsers(data)
     }
     retrieveUser()

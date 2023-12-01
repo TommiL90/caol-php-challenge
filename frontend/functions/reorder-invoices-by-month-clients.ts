@@ -18,10 +18,12 @@ export interface MonthWithClients {
 export const reorderInvoicesfromMonthsAndClients = async (
   data: RetrieveInvoice[],
 ): Promise<MonthWithClients[]> => {
+  console.log(data)
   const result: MonthWithClients[] = data.reduce(
     (acc: MonthWithClients[], invoice: RetrieveInvoice) => {
-      const invoiceMonth = invoice.data_emissao.getMonth()
-      const invoiceYear = invoice.data_emissao.getFullYear()
+      const formatedDate = new Date(invoice.data_emissao)
+      const invoiceMonth = formatedDate.getMonth()
+      const invoiceYear = formatedDate.getFullYear()
 
       const existingMonth = acc.find(
         (item) => item.mes === invoiceMonth && item.ano === invoiceYear,
@@ -69,7 +71,6 @@ export const reorderInvoicesfromMonthsAndClients = async (
     [],
   )
 
-  // Realizamos la conversión a Number justo antes de devolver los resultados
   return result.map((month) => ({
     ...month,
     clientes: month.clientes.map((cliente) => ({

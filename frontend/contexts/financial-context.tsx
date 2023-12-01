@@ -10,8 +10,6 @@ import {
   FixedCostFromConsultans,
   fixedCostFromConsultant,
 } from '@/functions/retrieve-fixed-costs-from-consultants'
-import { retrieveInvoices } from '@/functions/retrieve-invoices'
-import { retrieveOsByConsultants } from '@/functions/retrieve-os-by-user'
 import {
   MonthObjectArray,
   transformMonthObjectToArray,
@@ -22,6 +20,7 @@ import {
 } from '@/functions/user-summaries'
 import useConsultants from '@/hooks/useConsultants'
 import { DateRange } from '@/hooks/useDateRange'
+import { api } from '@/services/api'
 import { addDays } from 'date-fns'
 import {
   Dispatch,
@@ -73,28 +72,37 @@ export const FinancialProvider = ({ children }: IChildrenProps) => {
 
   const getReport = async () => {
     if (date?.from && date?.to && movedUsers.length > 0) {
-      const starDate = new Date(date.from)
+      const startDate = new Date(date.from)
       const endDate = new Date(date.to)
 
-      const os = await retrieveOsByConsultants(movedUsers)
+      const response = await api.get('invoicesbyconsultants', {
+        params: {
+          consultants: movedUsers,
+          startDate: startDate.toISOString(),
+          endDate: endDate.toISOString()
+        } })
 
-      const invoices = await retrieveInvoices(os, starDate, endDate)
+      const data: InvoicesByUserAndMonth  = response.data  
+      //delete
+      //const os = await retrieveOsByConsultants(movedUsers)
 
-      const invoicesByUserAndMonth = await orderInvoicesByUserAndMonth(
-        os,
-        invoices,
-      )
+      //const invoices = await retrieveInvoices(os, startDate, endDate)
 
-      setReportTable(invoicesByUserAndMonth)
+      //const invoicesByUserAndMonth = await orderInvoicesByUserAndMonth(
+      //  os,
+      //  invoices,
+      //)
+      //console.log(invoicesByUserAndMonth)
+      setReportTable(data)
 
       const monthObjectToArr = await transformMonthObjectToArray(
-        invoicesByUserAndMonth,
+        data,
       )
 
       setReportGraphic(monthObjectToArr)
 
       const summariesbyUser = await calculateUserSummaries(
-        invoicesByUserAndMonth,
+        data,
       )
 
       setReportPizza(summariesbyUser)
@@ -111,6 +119,9 @@ export const FinancialProvider = ({ children }: IChildrenProps) => {
     const fetchData = async () => {
       try {
         const fixedCostUsersData = await fixedCostFromConsultant()
+        const response = await api.get('fixed-cost')
+        //console.log(response.data)
+        //console.log(fixedCostUsersData)
         setfixedCostfromConsultantData(fixedCostUsersData)
       } catch (error) {
         console.error(error)

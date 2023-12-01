@@ -44,7 +44,8 @@ const useConsultants = () => {
 
   useEffect(() => {
     const retrieveUser = async () => {
-      const data = await retrieveConsultants()
+      //delete
+      // const data = await retrieveConsultants()
       const response = await api('consultants')
 
       const consultants: Consultant[] = response.data

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 'use client'
 
 import { ClientsContext } from '@/contexts/client-context'

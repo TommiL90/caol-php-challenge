@@ -10,7 +10,7 @@ class CaoUser extends Model
     use HasFactory;
 
     protected $table = 'cao_usuario';
-    protected $primaryKey = 'co_usuario';
+    //protected $primaryKey = 'co_usuario';
     public $timestamps = false;
 
     protected $fillable = [

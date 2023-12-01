@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Services\InvoicesService;
 use Illuminate\Http\Request;
 
 class InvoicesController extends Controller
@@ -12,11 +13,20 @@ class InvoicesController extends Controller
         $startDate = $request->query('startDate');
         $endDate = $request->query('endDate');
         $consultants = $request->query('consultants');
+      
+        $invoices = new InvoicesService;
 
-        echo($startDate);
-        echo($endDate);
-        echo($consultants);
+        return $invoices->orderInvoicesByUserAndMonth($consultants, $startDate, $endDate);
+    }
 
-        return Invoice::all();
+    public function getInvoicesByClientsAndDate(Request $request){
+
+        $startDate = $request->query('startDate');
+        $endDate = $request->query('endDate');
+        $clients = $request->query('clients');
+      
+        $invoices = new InvoicesService;
+
+        return $invoices->retrieveInvoicesByClients($clients, $startDate, $endDate);
     }
 }

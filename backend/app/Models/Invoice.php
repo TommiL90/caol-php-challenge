@@ -11,7 +11,7 @@ class Invoice extends Model
 
     protected $table = 'cao_fatura';
     protected $primaryKey = 'co_fatura';
-    public $timestamps = false; // Si no necesitas marcas de tiempo created_at y updated_at
+    public $timestamps = false; 
 
     protected $fillable = [
         'co_cliente',
@@ -26,6 +26,5 @@ class Invoice extends Model
         'total_imp_inc',
     ];
 
-    // Define los campos que son fechas
     protected $dates = ['data_emissao'];
 }

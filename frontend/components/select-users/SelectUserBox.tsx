@@ -19,7 +19,7 @@ const SelectUserBox = ({
       <ul className="h-24 overflow-auto border border-muted">
         {listUsers.map((user) => (
           <li
-            key={user.no_usuario}
+            key={user.co_usuario}
             className={`flex cursor-pointer items-center justify-between py-1 ${
               selectedUsers.includes(user) ? 'bg-gray-200' : ''
             }`}

@@ -20,9 +20,10 @@ export const orderInvoicesByUserAndMonth = async (
         for (const invoice of invoices) {
           if (invoice.co_os === os.co_os) {
             const invoiceDate = new Date(invoice.data_emissao)
-            const monthKey = `${invoiceDate.getFullYear()}-${
-              invoiceDate.getMonth() + 1
-            }`
+            const monthKey = `${invoiceDate.getUTCFullYear()}-${(invoiceDate.getUTCMonth() + 1)
+              .toString()
+              .padStart(2, '0')}`;
+            
 
             if (!accumulator[user][monthKey]) {
               accumulator[user][monthKey] = {

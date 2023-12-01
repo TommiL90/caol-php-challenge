@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\ConsultantsController;
 use App\Http\Controllers\invoiceController;
 use App\Http\Controllers\InvoicesController;
+use App\Http\Controllers\SalaryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,3 +27,9 @@ Route::middleware('auth:sanctum')->get('/use', function (Request $request) {
 Route::get('/consultants', [ConsultantsController::class, 'getAll']);
 
 Route::get('/invoicesbyconsultants', [InvoicesController::class, 'getInvoicesByConcultantsAndDate']);
+
+Route::get('/fixed-cost', [SalaryController::class, 'getFixedCostByConsultants']);
+
+Route::get('/clients', [ClientsController::class, 'getAll']);
+
+Route::get('/invoicesbyclients', [InvoicesController::class, 'getInvoicesByClientsAndDate']);
