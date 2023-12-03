@@ -10,6 +10,6 @@ echo "Caching routes"
 php artisan route:cache
 
 echo "Running migration"
-php artisan migrate --forc
+php artisan migrate --force
 
 
