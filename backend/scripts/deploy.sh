@@ -9,7 +9,7 @@ php artisan config:cache
 echo "Caching routes"
 php artisan route:cache
 
-echo "Running migration"
-php artisan migrate --force
+echo "Status conection DB"
+php artisan migrate:status
 
 
