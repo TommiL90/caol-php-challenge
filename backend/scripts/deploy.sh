@@ -13,4 +13,10 @@ echo "Location SSL Cert"
 php -r "echo openssl_get_cert_locations()['default_cert_file'];"
 
 
+echo "php migrate"
+php artisan migrate
+tail -f storage/logs/laravel.log
+
+
+
 
