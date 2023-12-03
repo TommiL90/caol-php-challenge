@@ -9,7 +9,8 @@ php artisan config:cache
 echo "Caching routes"
 php artisan route:cache
 
-echo "Status conection DB"
-php artisan migrate:status
+echo "Location SSL Cert"
+php -r "echo openssl_get_cert_locations()['default_cert_file'];"
+
 
 
