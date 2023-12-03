@@ -9,6 +9,7 @@ php artisan config:cache
 echo "Caching routes"
 php artisan route:cache
 
-echo "Running migrations"
+echo "Running migration"
+php artisan migrate --force
 
 
