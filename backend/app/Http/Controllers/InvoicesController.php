@@ -14,9 +14,11 @@ class InvoicesController extends Controller
         $endDate = $request->query('endDate');
         $consultants = $request->query('consultants');
       
-        $invoices = new InvoicesService;
+        $invoicesSevice = new InvoicesService;
 
-        return $invoices->orderInvoicesByUserAndMonth($consultants, $startDate, $endDate);
+        $invoices = $invoicesSevice->orderInvoicesByUserAndMonth($consultants, $startDate, $endDate);
+
+        response()->json($invoices, 200);
     }
 
     public function getInvoicesByClientsAndDate(Request $request){
@@ -24,9 +26,11 @@ class InvoicesController extends Controller
         $startDate = $request->query('startDate');
         $endDate = $request->query('endDate');
         $clients = $request->query('clients');
-      
-        $invoices = new InvoicesService;
 
-        return $invoices->retrieveInvoicesByClients($clients, $startDate, $endDate);
+        $invoicesSevice = new InvoicesService;
+
+        $invoices = $invoicesSevice->retrieveInvoicesByClients($clients, $startDate, $endDate);
+
+        response()->json($invoices, 200);
     }
 }

@@ -9,8 +9,10 @@ use Illuminate\Http\Request;
 class ConsultantsController extends Controller
 {
     public function getAll(){
-        $consultants = new ListConsultantsService;
+        $consultantsService = new ListConsultantsService;
 
-        return $consultants->findWithAuth();
+        $consultants = $consultantsService->findWithAuth();
+
+        return response()->json($consultants, 200);
     }
 }

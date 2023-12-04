@@ -8,8 +8,10 @@ use Illuminate\Http\Request;
 class ClientsController extends Controller
 {
     public function getAll(){
-        $clients = new ClientsService;
+        $clientsService = new ClientsService;
 
-        return $clients->findClients();
+        $clients = $clientsService->findClients();
+
+        return response()->json($clients, 200);
     }
 }

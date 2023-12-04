@@ -9,15 +9,19 @@ class SalaryController extends Controller
 {
     public function getFixedCostByConsultants(Request $request){
       
-        $fixedCost  = new SalaryService;
+        $salaryService  = new SalaryService;
 
-        return $fixedCost->getFixedCostFromConsultants();
+        $fixedCost  = $salaryService->getFixedCostFromConsultants();;
+
+        response()->json($fixedCost, 200);
     }
 
     public function getAverageFixedCostFromConsultants() {
 
-        $averageFixedCost  = new SalaryService;
+        $salaryService  = new SalaryService;
 
-        return $averageFixedCost->calculateAverageFixedCost();
+        $averageFixedCost = $salaryService->calculateAverageFixedCost();
+
+        response()->json($averageFixedCost, 200);
     }
 }
