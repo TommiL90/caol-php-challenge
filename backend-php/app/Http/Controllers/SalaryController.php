@@ -13,7 +13,7 @@ class SalaryController extends Controller
 
         $fixedCost  = $salaryService->getFixedCostFromConsultants();;
 
-        response()->json($fixedCost, 200);
+        return $fixedCost;
     }
 
     public function getAverageFixedCostFromConsultants() {
@@ -22,6 +22,6 @@ class SalaryController extends Controller
 
         $averageFixedCost = $salaryService->calculateAverageFixedCost();
 
-        response()->json($averageFixedCost, 200);
+        return $averageFixedCost;
     }
 }

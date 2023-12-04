@@ -1,6 +1,6 @@
 'use client'
-import { Client, retrieveClients } from '@/functions/retrieve-clients'
 import { api } from '@/services/api'
+import { Client } from '@/types/clients'
 import { useEffect, useState } from 'react'
 
 const useClients = () => {

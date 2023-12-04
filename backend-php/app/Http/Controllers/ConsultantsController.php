@@ -13,6 +13,6 @@ class ConsultantsController extends Controller
 
         $consultants = $consultantsService->findWithAuth();
 
-        return response()->json($consultants, 200);
+        return $consultants;
     }
 }

@@ -12,6 +12,6 @@ class ClientsController extends Controller
 
         $clients = $clientsService->findClients();
 
-        return response()->json($clients, 200);
+        return $clients;
     }
 }

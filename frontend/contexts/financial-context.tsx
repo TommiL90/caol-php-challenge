@@ -68,7 +68,8 @@ export const FinancialProvider = ({ children }: IChildrenProps) => {
     if (date?.from && date?.to && movedUsers.length > 0) {
       const startDate = new Date(date.from)
       const endDate = new Date(date.to)
-
+      console.log(movedUsers)
+      console.log(startDate.toISOString(), endDate.toISOString())
       try {
         const response = await api.get('invoicesbyconsultants', {
           params: {
@@ -78,7 +79,7 @@ export const FinancialProvider = ({ children }: IChildrenProps) => {
           } })
   
         const data: InvoicesByUserAndMonth  = response.data  
-  
+        console.log(response)
         setReportTable(data)
         
         const monthObjectToArr = await transformMonthObjectToArray(
