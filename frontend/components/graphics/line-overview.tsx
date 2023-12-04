@@ -17,6 +17,7 @@ export function LineOverview() {
   const { reportGraphic, movedUsers } = useContext(ClientsContext)
 
   const result = reportGraphic.map((item) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const newItem: { [key: string]: any } = { date: item.date }
     for (const key in item) {
       if (key !== 'date') {

@@ -2,6 +2,17 @@
 
 import { createArrUsers } from '@/functions/create-array-users'
 import {
+  InvoicesByUserAndMonth,
+  orderInvoicesByUserAndMonth,
+} from '@/functions/order-os-by-user-and-month'
+import { Consultant } from '@/functions/retrieve-consultants'
+import {
+  FixedCostFromConsultans,
+  fixedCostFromConsultant,
+} from '@/functions/retrieve-fixed-costs-from-consultants'
+import { retrieveInvoices } from '@/functions/retrieve-invoices'
+import { retrieveOsByConsultants } from '@/functions/retrieve-os-by-user'
+import {
   MonthObjectArray,
   transformMonthObjectToArray,
 } from '@/functions/transform-to-month-object-array'
@@ -11,10 +22,6 @@ import {
 } from '@/functions/user-summaries'
 import useConsultants from '@/hooks/useConsultants'
 import { DateRange } from '@/hooks/useDateRange'
-import { api } from '@/services/api'
-import { Consultant } from '@/types/consultant'
-import { FixedCostFromConsultans } from '@/types/fixed-cost-from-consultants'
-import { InvoicesByUserAndMonth } from '@/types/invoices-by-user-and-month'
 import { addDays } from 'date-fns'
 import {
   Dispatch,
@@ -66,41 +73,35 @@ export const FinancialProvider = ({ children }: IChildrenProps) => {
 
   const getReport = async () => {
     if (date?.from && date?.to && movedUsers.length > 0) {
-      const startDate = new Date(date.from)
+      const starDate = new Date(date.from)
       const endDate = new Date(date.to)
-      console.log(movedUsers)
-      console.log(startDate.toISOString(), endDate.toISOString())
-      try {
-        const response = await api.get('invoicesbyconsultants', {
-          params: {
-            consultants: movedUsers,
-            startDate: startDate.toISOString(),
-            endDate: endDate.toISOString()
-          } })
-  
-        const data: InvoicesByUserAndMonth  = response.data  
-        console.log(response)
-        setReportTable(data)
-        
-        const monthObjectToArr = await transformMonthObjectToArray(
-          data,
-        )
-  
-        setReportGraphic(monthObjectToArr)
-  
-        const summariesbyUser = await calculateUserSummaries(
-          data,
-        )
-  
-        setReportPizza(summariesbyUser)
-  
-        const arr = await createArrUsers(monthObjectToArr)
-  
-        setUserArr(arr)
-      } catch (error) {
-        console.log(error)
-      }
 
+      const os = await retrieveOsByConsultants(movedUsers)
+
+      const invoices = await retrieveInvoices(os, starDate, endDate)
+
+      const invoicesByUserAndMonth = await orderInvoicesByUserAndMonth(
+        os,
+        invoices,
+      )
+
+      setReportTable(invoicesByUserAndMonth)
+
+      const monthObjectToArr = await transformMonthObjectToArray(
+        invoicesByUserAndMonth,
+      )
+
+      setReportGraphic(monthObjectToArr)
+
+      const summariesbyUser = await calculateUserSummaries(
+        invoicesByUserAndMonth,
+      )
+
+      setReportPizza(summariesbyUser)
+
+      const arr = await createArrUsers(monthObjectToArr)
+
+      setUserArr(arr)
     } else {
       alert('date or users are undefined')
     }
@@ -109,9 +110,8 @@ export const FinancialProvider = ({ children }: IChildrenProps) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('fixed-cost')
-        const data: FixedCostFromConsultans[] = response.data
-        setfixedCostfromConsultantData(data)
+        const fixedCostUsersData = await fixedCostFromConsultant()
+        setfixedCostfromConsultantData(fixedCostUsersData)
       } catch (error) {
         console.error(error)
       }

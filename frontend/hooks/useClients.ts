@@ -35,8 +35,6 @@ const useClients = () => {
 
   useEffect(() => {
     const retrieveUser = async () => {
-      //delete
-      //const data = await retrieveClients()
       const response = await api('clients')
       const data: Client[] = response.data
       setAvailableUsers(data)

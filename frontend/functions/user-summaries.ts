@@ -1,6 +1,6 @@
 'use server'
-import { InvoicesByUserAndMonth } from '@/types/invoices-by-user-and-month'
 import Decimal from 'decimal.js-light'
+import { InvoicesByUserAndMonth } from './order-os-by-user-and-month'
 
 export interface UserSummaries {
   name: string

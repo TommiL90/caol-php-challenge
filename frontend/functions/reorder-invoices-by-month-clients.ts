@@ -1,8 +1,8 @@
 /* eslint-disable camelcase */
 'use server'
 
-import { RetrieveInvoice } from '@/types/retrieve-invoices'
 import Decimal from 'decimal.js-light'
+import { RetrieveInvoice } from './retrieve-invoices'
 
 export interface ClientWithNetRevenue {
   co_cliente: number
@@ -18,7 +18,6 @@ export interface MonthWithClients {
 export const reorderInvoicesfromMonthsAndClients = async (
   data: RetrieveInvoice[],
 ): Promise<MonthWithClients[]> => {
-  console.log(data)
   const result: MonthWithClients[] = data.reduce(
     (acc: MonthWithClients[], invoice: RetrieveInvoice) => {
       const formatedDate = new Date(invoice.data_emissao)
@@ -71,6 +70,7 @@ export const reorderInvoicesfromMonthsAndClients = async (
     [],
   )
 
+  // Realizamos la conversión a Number justo antes de devolver los resultados
   return result.map((month) => ({
     ...month,
     clientes: month.clientes.map((cliente) => ({

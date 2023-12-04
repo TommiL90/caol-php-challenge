@@ -1,5 +1,4 @@
-
-import { Consultant } from '@/types/consultant'
+import { Consultant } from '@/functions/retrieve-consultants'
 import React from 'react'
 
 interface SelectedUserBoxProps {

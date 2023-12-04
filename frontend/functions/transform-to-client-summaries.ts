@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use server'
 import Decimal from 'decimal.js-light'
 import { OutputItem } from './transform-invoices-to-monthly-format'

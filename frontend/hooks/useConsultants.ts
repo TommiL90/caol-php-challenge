@@ -3,7 +3,6 @@ import {
   Consultant,
   retrieveConsultants,
 } from '@/functions/retrieve-consultants'
-import { api } from '@/services/api'
 import { useEffect, useState } from 'react'
 
 const useConsultants = () => {
@@ -44,13 +43,8 @@ const useConsultants = () => {
 
   useEffect(() => {
     const retrieveUser = async () => {
-      //delete
-      // const data = await retrieveConsultants()
-      const response = await api('consultants')
-
-      const consultants: Consultant[] = response.data
-
-      setAvailableUsers(consultants)
+      const data = await retrieveConsultants()
+      setAvailableUsers(data)
     }
     retrieveUser()
   }, [])

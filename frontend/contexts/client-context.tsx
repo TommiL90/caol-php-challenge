@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { findAllClients } from '@/functions/find-all-clients'
@@ -6,6 +7,7 @@ import {
   MonthWithClients,
   reorderInvoicesfromMonthsAndClients,
 } from '@/functions/reorder-invoices-by-month-clients'
+import { retrieveInvoicesFromClients } from '@/functions/retrieve-invoices-froms-clients'
 import { transformInvoicesToMonthlyFormat } from '@/functions/transform-invoices-to-monthly-format'
 import { transformToClientSummaries } from '@/functions/transform-to-client-summaries'
 import { UserSummaries } from '@/functions/user-summaries'
@@ -62,6 +64,8 @@ export const ClientsProvider = ({ children }: IChildrenProps) => {
   const getReport = async () => {
     if (date?.from && date?.to && movedUsers.length > 0) {
 
+      let invoices: RetrieveInvoice[] = []
+
       try {
         const response = await api.get('invoicesbyclients', {
           params: {
@@ -71,35 +75,33 @@ export const ClientsProvider = ({ children }: IChildrenProps) => {
           }
         });
 
-        const data: RetrieveInvoice[] = response.data;
-
-        const orderInvoicesfromMonthsAndClients =
-          await reorderInvoicesfromMonthsAndClients(data)
-
-        setArrOrderedforMonthAndUser(orderInvoicesfromMonthsAndClients)
-
-        const allClients = await findAllClients(orderInvoicesfromMonthsAndClients)
-
-        setAllClientsForTable(allClients)
-
-        // grafico
-
-        const dataMonthlyFormatForRecharts =
-          await transformInvoicesToMonthlyFormat(
-            orderInvoicesfromMonthsAndClients,
-          )
-
-        setReportGraphic(dataMonthlyFormatForRecharts)
-
-        const dataForPizzaRechart = await transformToClientSummaries(
-          dataMonthlyFormatForRecharts,
-        )
-        setReportPizza(dataForPizzaRechart)
-
+        invoices = response.data
       } catch (error) {
-        console.error("Error", error);
+        console.log(error)
       }
 
+      const orderInvoicesfromMonthsAndClients =
+        await reorderInvoicesfromMonthsAndClients(invoices)
+
+      setArrOrderedforMonthAndUser(orderInvoicesfromMonthsAndClients)
+
+      const allClients = await findAllClients(orderInvoicesfromMonthsAndClients)
+
+      setAllClientsForTable(allClients)
+
+      // grafico
+
+      const dataMonthlyFormatForRecharts =
+        await transformInvoicesToMonthlyFormat(
+          orderInvoicesfromMonthsAndClients,
+        )
+
+      setReportGraphic(dataMonthlyFormatForRecharts)
+
+      const dataForPizzaRechart = await transformToClientSummaries(
+        dataMonthlyFormatForRecharts,
+      )
+      setReportPizza(dataForPizzaRechart)
     } else {
       alert('date or users are undefined')
     }
