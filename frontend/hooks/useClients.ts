@@ -8,6 +8,7 @@ const useClients = () => {
   const [selectedUsers, setSelectedUsers] = useState<Client[]>([])
   const [movedUsers, setMovedUsers] = useState<Client[]>([])
   const handleUserClick = (user: Client) => {
+    
     if (selectedUsers.includes(user)) {
       const updatedSelectedUsers = selectedUsers.filter((u) => u !== user)
       setSelectedUsers(updatedSelectedUsers)
@@ -35,9 +36,13 @@ const useClients = () => {
 
   useEffect(() => {
     const retrieveUser = async () => {
-      const response = await api('clients')
-      const data: Client[] = response.data
-      setAvailableUsers(data)
+      try {
+        const response = await api('clients')
+        const data: Client[] = response.data
+        setAvailableUsers(data)
+      } catch (error) {
+        console.error(error)
+      }
     }
     retrieveUser()
   }, [])

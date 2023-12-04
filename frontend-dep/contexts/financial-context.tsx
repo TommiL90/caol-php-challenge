@@ -79,7 +79,7 @@ export const FinancialProvider = ({ children }: IChildrenProps) => {
           } })
   
         const data: InvoicesByUserAndMonth  = response.data  
-        console.log(response)
+
         setReportTable(data)
         
         const monthObjectToArr = await transformMonthObjectToArray(

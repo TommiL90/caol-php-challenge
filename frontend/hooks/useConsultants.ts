@@ -1,8 +1,6 @@
 'use client'
-import {
-  Consultant,
-  retrieveConsultants,
-} from '@/functions/retrieve-consultants'
+import { api } from '@/services/api'
+import { Consultant } from '@/types/consultant'
 import { useEffect, useState } from 'react'
 
 const useConsultants = () => {
@@ -43,8 +41,15 @@ const useConsultants = () => {
 
   useEffect(() => {
     const retrieveUser = async () => {
-      const data = await retrieveConsultants()
-      setAvailableUsers(data)
+      try {
+        const response = await api('consultants')
+
+        const consultants: Consultant[] = response.data
+
+        setAvailableUsers(consultants)
+      } catch (error) {
+        console.error(error)
+      }
     }
     retrieveUser()
   }, [])
