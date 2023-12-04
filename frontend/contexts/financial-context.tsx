@@ -2,10 +2,6 @@
 
 import { createArrUsers } from '@/functions/create-array-users'
 import {
-  InvoicesByUserAndMonth,
-  orderInvoicesByUserAndMonth,
-} from '@/functions/order-os-by-user-and-month'
-import {
   MonthObjectArray,
   transformMonthObjectToArray,
 } from '@/functions/transform-to-month-object-array'
@@ -18,6 +14,7 @@ import { DateRange } from '@/hooks/useDateRange'
 import { api } from '@/services/api'
 import { Consultant } from '@/types/consultant'
 import { FixedCostFromConsultans } from '@/types/fixed-cost-from-consultants'
+import { InvoicesByUserAndMonth } from '@/types/invoices-by-user-and-month'
 import { addDays } from 'date-fns'
 import {
   Dispatch,
@@ -72,32 +69,37 @@ export const FinancialProvider = ({ children }: IChildrenProps) => {
       const startDate = new Date(date.from)
       const endDate = new Date(date.to)
 
-      const response = await api.get('invoicesbyconsultants', {
-        params: {
-          consultants: movedUsers,
-          startDate: startDate.toISOString(),
-          endDate: endDate.toISOString()
-        } })
+      try {
+        const response = await api.get('invoicesbyconsultants', {
+          params: {
+            consultants: movedUsers,
+            startDate: startDate.toISOString(),
+            endDate: endDate.toISOString()
+          } })
+  
+        const data: InvoicesByUserAndMonth  = response.data  
+  
+        setReportTable(data)
+        
+        const monthObjectToArr = await transformMonthObjectToArray(
+          data,
+        )
+  
+        setReportGraphic(monthObjectToArr)
+  
+        const summariesbyUser = await calculateUserSummaries(
+          data,
+        )
+  
+        setReportPizza(summariesbyUser)
+  
+        const arr = await createArrUsers(monthObjectToArr)
+  
+        setUserArr(arr)
+      } catch (error) {
+        console.log(error)
+      }
 
-      const data: InvoicesByUserAndMonth  = response.data  
-
-      setReportTable(data)
-      
-      const monthObjectToArr = await transformMonthObjectToArray(
-        data,
-      )
-
-      setReportGraphic(monthObjectToArr)
-
-      const summariesbyUser = await calculateUserSummaries(
-        data,
-      )
-
-      setReportPizza(summariesbyUser)
-
-      const arr = await createArrUsers(monthObjectToArr)
-
-      setUserArr(arr)
     } else {
       alert('date or users are undefined')
     }
@@ -106,12 +108,8 @@ export const FinancialProvider = ({ children }: IChildrenProps) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        //delete
-        //const fixedCostUsersData = await fixedCostFromConsultant()
         const response = await api.get('fixed-cost')
         const data: FixedCostFromConsultans[] = response.data
-        //console.log(response.data)
-        //console.log(fixedCostUsersData)
         setfixedCostfromConsultantData(data)
       } catch (error) {
         console.error(error)
