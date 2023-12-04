@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class SalaryController extends Controller
 {
-    public function getFixedCostByConsultants(Request $request){
+    public function getFixedCostByConsultants(){
       
         $salaryService  = new SalaryService;
 

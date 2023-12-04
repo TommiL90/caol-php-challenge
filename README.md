@@ -3,6 +3,8 @@
 
 O Projeto é uma aplicacao de análise do desempenho dos consultores de uma empresa. Ele oferece uma variedade de funcionalidades para acessar informações sobre os consultores, gerar relatórios, gráficos.
 
+  ejemplo de aplicativo em produção: https://caol-project.vercel.app/  
+
 ## Recursos da Aba Consultor
 
 ### Lista de Consultores
@@ -11,7 +13,6 @@ O Projeto é uma aplicacao de análise do desempenho dos consultores de uma empr
 - Os filtros podem ser aplicados com base nas seguintes condições na tabela PERMISSAO_SISTEMA: CO_SISTEMA = 1, IN_ATIVO = S e CO_TIPO_USUARIO = 0, 1, 2.
 
 ### Relatório - Objetivo
-
 - O objetivo deste relatório é apresentar, de forma separada por consultor, os resultados das receitas geradas por cada profissional. Isso é feito levando em consideração os consultores selecionados nos filtros.
 - A informação de "receita líquida" do mês de referência é obtida somando as faturas emitidas relacionadas às Ordens de Serviço (OS) de cada consultor. A receita líquida é calculada subtraindo o valor total de impostos do valor da fatura.
 - O custo fixo de cada consultor é obtido a partir da tabela CAO_SALARIO.
@@ -52,7 +53,7 @@ O Projeto Web Aba Cliente oferece recursos semelhantes à Aba Consultor, mas com
 
 
 
-Tecnologias utilizadas:
+Tecnologias utilizadas no Frontend:
 - [React](https://pt-br.react.dev/) 
 - [NextJS](https://nextjs.org/)
 - [TypeScript](https://www.typescriptlang.org/)
@@ -60,6 +61,35 @@ Tecnologias utilizadas:
 - [Prisma](https://www.prisma.io/)
 - [Recharts](https://recharts.org/)
 - [Vercel](https://vercel.com/)
+
+
+Tecnologias utilizadas no Backend:
+- [Laravel](https://laravel.com/)
+- [Planetscale](https://planetscale.com/)
+
+## Rotas da API Utilizadas
+
+### GET - /consultants
+Esta rota retorna todos os dados dos consultores que atendem às condições descritas no parágrafo "Lista de Consultores".
+
+### GET - /clients
+Esta rota retorna todos os dados dos clientes que atendem às condições descritas no parágrafo "Lista de Clientes".
+
+### GET - /invoicesbyconsultants
+Esta rota retorna todas as faturas dos consultores selecionados dentro de uma margem de tempo específica. Os parâmetros são enviados através dos seguintes query params: "consultans", "startDate" e "endDate".
+
+### GET - /invoicesbyclients
+Esta rota retorna todas as faturas dos clientes selecionados dentro de uma margem de tempo específica. Os parâmetros são enviados através dos seguintes query params: "clients", "startDate" e "endDate".
+
+### GET - /fixed-cost
+Esta rota retorna uma lista dos custos fixos de todos os consultores disponíveis.
+
+### GET - /average-fixed-cost
+Esta rota retorna o valor médio do salário bruto dos consultores disponíveis.
+
+
+
+
 
 ---
 
