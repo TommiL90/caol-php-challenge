@@ -58,7 +58,6 @@ Tecnologias utilizadas no Frontend:
 - [NextJS](https://nextjs.org/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Tailwind](https://tailwindcss.com/)
-- [Prisma](https://www.prisma.io/)
 - [Recharts](https://recharts.org/)
 - [Vercel](https://vercel.com/)
 
