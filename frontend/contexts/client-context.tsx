@@ -36,6 +36,7 @@ interface IClientsContext {
   arrOrderesForMonthAndUser: MonthWithClients[]
   reportGraphic: Record<string, any>[]
   reportPizza: UserSummaries[]
+  loading: boolean
 }
 
 export const ClientsContext = createContext({} as IClientsContext)
@@ -48,6 +49,7 @@ export const ClientsProvider = ({ children }: IChildrenProps) => {
   >([])
   const [reportGraphic, setReportGraphic] = useState<Record<string, any>[]>([])
   const [reportPizza, setReportPizza] = useState<UserSummaries[]>([])
+  const [loading, setLoading] = useState(false)
 
   const [date, setDate] = useState<DateRange | undefined>({
     from: new Date(2007, 0, 1),
@@ -67,6 +69,7 @@ export const ClientsProvider = ({ children }: IChildrenProps) => {
       let invoices: RetrieveInvoice[] = []
 
       try {
+        setLoading(true)
         const response = await api.get('invoicesbyclients', {
           params: {
             clients: movedUsers,
@@ -77,7 +80,10 @@ export const ClientsProvider = ({ children }: IChildrenProps) => {
 
         invoices = response.data
       } catch (error) {
+        setLoading(false)
         console.log(error)
+      } finally {
+        setLoading(false)
       }
 
       const orderInvoicesfromMonthsAndClients =
@@ -122,6 +128,7 @@ export const ClientsProvider = ({ children }: IChildrenProps) => {
         arrOrderesForMonthAndUser,
         reportGraphic,
         reportPizza,
+        loading
       }}
     >
       {children}

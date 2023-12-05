@@ -6,7 +6,7 @@ import { CalendarDateRangePicker } from '@/components/date-range-picker'
 import { ClientsContext } from '@/contexts/client-context'
 
 const SelectUserFooterClients = () => {
-  const { getReport, date, setDate } = useContext(ClientsContext)
+  const { getReport, date, setDate, loading } = useContext(ClientsContext)
   return (
     <div className="flex items-center justify-center gap-8 space-x-2">
       <div className="flex flex-col gap-2">
@@ -18,7 +18,7 @@ const SelectUserFooterClients = () => {
         />
       </div>
       <Button onClick={getReport} className="h-full">
-        Gerar Relatário
+        {loading ? 'Carregando data' : 'Generar Relatório'}
       </Button>
     </div>
   )

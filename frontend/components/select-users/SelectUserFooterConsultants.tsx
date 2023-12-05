@@ -7,7 +7,7 @@ import { FinancialContext } from '@/contexts/financial-context'
 import { CalendarIcon } from '@radix-ui/react-icons'
 
 const SelectUserFooterConsultants = () => {
-  const { getReport, date, setDate } = useContext(FinancialContext)
+  const { getReport, date, setDate, loading } = useContext(FinancialContext)
   return (
     <div className="flex items-center justify-center gap-8 space-x-2">
       <div className="flex flex-col gap-2">
@@ -22,7 +22,7 @@ const SelectUserFooterConsultants = () => {
         />
       </div>
       <Button onClick={getReport} className="h-full">
-        Gerar Relatário
+        {loading ? 'Carregando data' : 'Generar Relatório'}
       </Button>
     </div>
   )

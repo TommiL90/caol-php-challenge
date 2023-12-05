@@ -15,7 +15,7 @@ import { api } from '@/services/api'
 import { Consultant } from '@/types/consultant'
 import { FixedCostFromConsultans } from '@/types/fixed-cost-from-consultants'
 import { InvoicesByUserAndMonth } from '@/types/invoices-by-user-and-month'
-import { addDays } from 'date-fns'
+import { addDays, set } from 'date-fns'
 import {
   Dispatch,
   SetStateAction,
@@ -38,6 +38,7 @@ interface IFinancialContext {
   date: DateRange | undefined
   setDate: Dispatch<SetStateAction<DateRange | undefined>>
   getReport: () => Promise<void>
+  loading: boolean
 }
 
 interface IChildrenProps {
@@ -63,6 +64,7 @@ export const FinancialProvider = ({ children }: IChildrenProps) => {
   const [fixedCostfromConsultantData, setfixedCostfromConsultantData] =
     useState<FixedCostFromConsultans[]>([])
   const [userArr, setUserArr] = useState<string[]>([])
+  const [loading, setLoading] = useState(false)
 
   const getReport = async () => {
     if (date?.from && date?.to && movedUsers.length > 0) {
@@ -72,6 +74,7 @@ export const FinancialProvider = ({ children }: IChildrenProps) => {
       let invoicesByUserAndMonth: InvoicesByUserAndMonth = {} 
 
       try {
+        setLoading(true)
         const response = await api.get('invoicesbyconsultants', {
           params: {
             consultants: movedUsers,
@@ -81,7 +84,10 @@ export const FinancialProvider = ({ children }: IChildrenProps) => {
   
           invoicesByUserAndMonth  = response.data 
       } catch (error) {
+        setLoading(false)
         console.log(error)
+      } finally {
+        setLoading(false)
       }
 
       setReportTable(invoicesByUserAndMonth)
@@ -136,6 +142,7 @@ export const FinancialProvider = ({ children }: IChildrenProps) => {
         handleMove,
         date,
         setDate,
+        loading
       }}
     >
       {children}
